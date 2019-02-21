@@ -1,28 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
+import './layouts/App.css';
 
-import TurnTracker from './TurnTracker';
+// import TurnTracker from './components/TurnTracker';
+import SpotifyPlaylists from './components/SpotifyPlaylists';
 
 class App extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
+  constructor(props) {
+    super(props);
+    const session = new URLSearchParams(props.location.search).get('session');
+    if (session) {
+      this.state = {
+        session: session
+      };
+      props.cookies.set('session', session, { path: '/' });
+      props.history.push('/');
+      console.log("Test")
+    }
+    else {
+      this.state = {
+        session: props.cookies.get('session') || ""
+      };
+    }
+  }
+
+  spotifyLogout(name) {
+    const { cookies } = this.props;
+ 
+    cookies.set('session', '', { path: '/' });
+    this.setState({ session: '' });
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          {/*<img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
           <a
+            style={{position: 'absolute', top:0, right:0}}
             className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="http://localhost:5907/auth/spotify"
           >
-            Learn React
-          </a>*/}
+            Login to Spotify
+          </a>
 
-          <TurnTracker />
+          <SpotifyPlaylists />
 
         </header>
       </div>
@@ -30,4 +56,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withCookies(App);
