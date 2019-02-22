@@ -1,12 +1,15 @@
+
+// Setup environment
 require('dotenv').config()
 
+// Connect to mongodb
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URL, {useNewUrlParser: true});
 
+// Setup Express
 const express = require('express')
-const auth = require('./auth')
-const api = require('./api')
-
+const auth = require('./routes/auth')
+const api = require('./routes/api')
 const app = express()
 const port = 5907
 

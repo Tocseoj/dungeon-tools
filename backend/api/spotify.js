@@ -15,6 +15,7 @@ router.get('/dnd-playlists', (req, res) => {
 	if (!session) {
 		res.sendStatus(401)
 	}
+	res.sendStatus(404)
 	var token = req.app.get(session)
 	if (token) {
 		request.get({

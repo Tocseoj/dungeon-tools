@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const spotify = require('./api/spotify')
+const spotify = require('../auth/spotify')
 
 router.use('/spotify', spotify)
 

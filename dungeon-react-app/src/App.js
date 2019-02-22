@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
-import { withCookies, Cookies } from 'react-cookie';
+import cookie from 'react-cookies'
 import './layouts/App.css';
 
-// import TurnTracker from './components/TurnTracker';
-import SpotifyPlaylists from './components/SpotifyPlaylists';
-
 class App extends Component {
-  static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
-  };
-
   constructor(props) {
     super(props);
-    const session = new URLSearchParams(props.location.search).get('session');
+    var session = new URLSearchParams(props.location.search).get('session');
     if (session) {
       this.state = {
         session: session
@@ -23,9 +16,18 @@ class App extends Component {
       console.log("Test")
     }
     else {
-      this.state = {
-        session: props.cookies.get('session') || ""
-      };
+      session = props.cookies.get('session')
+      if (session) {
+        this.state = {
+          session: session
+        };
+      } else {
+        session = cookie.load('session')
+        this.state = {
+          session: session || ""
+        };
+      }
+      
     }
   }
 
@@ -48,7 +50,6 @@ class App extends Component {
             Login to Spotify
           </a>
 
-          <SpotifyPlaylists />
 
         </header>
       </div>

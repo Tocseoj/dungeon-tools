@@ -64,11 +64,15 @@ router.get('/redirect', (req, res) => {
 		req.app.set(session, token)
 		const user = new models.SpotifyUser(extend(token, {session_token: session}))
 		user.save().then(() => console.log('Added new SpotifyUser: ' + session));
-		res.redirect(build_url(back_url, {
-			queryParams: {
-				session: session
-			}
-		}));
+		// res.redirect(build_url(back_url, {
+		// 	queryParams: {
+		// 		session: session
+		// 	}
+		// }));
+		res.cookie('session_token', session, {
+			maxAge: (token.expires_in * 1000)
+		})
+		res.redirect(back_url)
 	})
 })
 
